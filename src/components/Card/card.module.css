@@ -1,0 +1,226 @@
+/* Card Styles */
+.card {
+  width: 100px;
+  height: 140px;
+  border: 1px solid #555;
+  border-collapse: collapse;
+  border-radius: calc(var(--radius-lg) + 1px);
+  box-shadow:
+    var(--shadow-lg),
+    inset 0 0 15px #0004;
+  position: absolute;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    top var(--transition-base),
+    border-radius var(--transition-base);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+}
+
+.suit-icon-small {
+  filter: brightness(0) invert(1);
+  width: 18px;
+  height: 18px;
+}
+
+.card[draggable="true"] {
+  cursor: grab;
+}
+
+.card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  z-index: 100 !important;
+}
+
+.card.selected {
+  transform: translateY(-8px);
+  box-shadow:
+    0 0 0 3px var(--color-accent-primary),
+    var(--shadow-xl);
+}
+
+/* Card Content */
+.card-content {
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Colors */
+.card-content.suit-void {
+  background: var(--void-gradient);
+  color: white;
+}
+
+.card-content.suit-strand {
+  background: var(--strand-gradient);
+  color: white;
+}
+
+.card-content.suit-stasis {
+  background: var(--stasis-gradient);
+  color: white;
+}
+
+.card-content.suit-solar {
+  background: var(--solar-gradient);
+  color: white;
+}
+
+.card-corner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.card-corner.top-left {
+  position: absolute;
+  z-index: 3;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  filter: drop-shadow(0 0 0.5px #000);
+}
+
+.card-corner.bottom-right {
+  position: absolute;
+  z-index: 3;
+  bottom: var(--spacing-sm);
+  right: var(--spacing-sm);
+  transform: rotate(180deg);
+  filter: drop-shadow(0 0 0.5px #000);
+}
+
+.card-corner .rank {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.card-corner .suit {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* SVG suit icons */
+.suit-icon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Make icons white */
+}
+
+.card-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.suit-icon-large {
+  filter: brightness(0) invert(1); /* Make icons white */
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Card background image */
+.card-background-image {
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Card Back */
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-image: url("../../assets/Shirt.png");
+  background-size: cover;
+}
+
+.card-corner .rank {
+  font-size: 1rem;
+}
+
+.card-corner .suit {
+  font-size: 0.875rem;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 768px) {
+  .suit-icon-large {
+    height: 30%;
+    width: auto;
+  }
+  .card {
+    width: 80px;
+    height: 112px;
+  }
+}
+@media (max-width: 480px) {
+  .card {
+    width: 70px;
+    height: 98px;
+  }
+}
+
+/* Dark icons and symbols for “dark” cards */
+/* .card-content.light {
+  color: white;
+}
+
+.card-content.dark {
+  color: black;
+}
+
+.dark .card-corner {
+  filter: none;
+}*/
+
+/* Black outlines are not necessary for black symbols. */
+/* .dark .suit-icon-small {
+  filter: brightness(0) invert(0);
+}
+.dark .suit-icon-large {
+  filter: brightness(0) invert(0);
+} */
+
+/* We make the suit symbol the background image of the card. */
+/* .suit-icon-large {
+  position: absolute;
+  height: 120%;
+  width: auto;
+  opacity: 0.2;
+  filter: drop-shadow(0 0 25px #000);
+} */
