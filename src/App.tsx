@@ -186,6 +186,11 @@ export function App() {
       setGameState(newState);
     }
   };
+  useEffect(() => {
+    if (checkWinCondition(gameState.foundations)) {
+      gameState.gameWon = true;
+    }
+  }, [handleDropOnFoundation, handleAutoMove]);
 
   return (
     <div className="app">
