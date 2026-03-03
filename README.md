@@ -1,4 +1,4 @@
-# Destiny Solitaire
+<img src='./src/assets/logo.webp' width='300'  />
 
 **Destiny Solitaire** is a thematic reimagining of the classic Klondike Solitaire, set within the sprawling sci-fi universe of Destiny. Master the paracausal forces, organize the chaos of the Darkness, and channel the Light to clear the board.
 
