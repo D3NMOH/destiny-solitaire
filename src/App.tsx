@@ -1,5 +1,5 @@
 import "./index.css";
-import type { Card as CardType, GameState, Language } from "./types";
+import type { Card as CardType, GameState } from "./types";
 import { useEffect, useRef, useState } from "react";
 import {
   autoMoveToFoundation,
@@ -12,22 +12,24 @@ import {
 import TopBar from "./components/TopBar";
 import Modal from "./components/Modal";
 import { Card, getSuitClass } from "./components/Card";
+import Tableau from "./components/Tableau";
+import Foundations from "./components/Foundations";
+import Waste from "./components/Waste";
+import Settings from "./components/Settings";
 
-// assets
 import logo from "./assets/logo.webp";
-import Kabale from "./assets/Kabale.svg";
-import Vex from "./assets/Vex.svg";
-import Taken from "./assets/Taken.svg";
-import Fallen from "./assets/Fallen.svg";
 
-import { translations } from "./translations";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useParticles } from "./hooks/useParticles";
 
+// localization
+import { translations } from "./data/translations";
+import { langStore } from "./stores/langStore";
+
 export function App() {
   const [gameState, setGameState] = useState<GameState>(initializeGame());
-  const [language, setLanguage] = useState<Language>("de");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language, setLanguage } = langStore();
+  const [showSettings, setShowSettings] = useState(false);
 
   const timeRef = useRef<number | null>(null);
 
@@ -115,6 +117,42 @@ export function App() {
     handlePointerDown,
   } = useDragAndDrop(gameState, handleDropOnTableau, handleDropOnFoundation);
 
+  const prevPointerXRef = useRef<number | null>(null);
+  const [dragRotation, setDragRotation] = useState(0);
+  const movementTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (movementTimeoutRef.current) {
+      clearTimeout(movementTimeoutRef.current);
+    }
+
+    if (pointerPosition && !isReturnAnimation) {
+      if (prevPointerXRef.current !== null) {
+        const dx = pointerPosition.x - prevPointerXRef.current;
+
+        const cardHeight = 140;
+        const stackHeight = (draggedCards.length - 1) * 30 + cardHeight;
+        const centerY = stackHeight / 2;
+        const leverage = (centerY - pointerOffset.y) / centerY;
+
+        const targetRotation = Math.max(-15, Math.min(15, dx * 0.8 * leverage));
+        setDragRotation(targetRotation);
+      }
+      prevPointerXRef.current = pointerPosition.x;
+
+      movementTimeoutRef.current = window.setTimeout(() => {
+        setDragRotation(0);
+      }, 100);
+    } else {
+      prevPointerXRef.current = null;
+      setDragRotation(0);
+    }
+
+    return () => {
+      if (movementTimeoutRef.current) clearTimeout(movementTimeoutRef.current);
+    };
+  }, [pointerPosition, isReturnAnimation, draggedCards, pointerOffset]);
+
   useEffect(() => {
     if (!gameState.gameWon) {
       timeRef.current = window.setInterval(() => {
@@ -152,7 +190,6 @@ export function App() {
 
   const handleNewGame = () => {
     setGameState(initializeGame());
-    setIsMenuOpen(false);
   };
 
   const handleAutoMove = () => {
@@ -186,6 +223,7 @@ export function App() {
       setGameState(newState);
     }
   };
+
   useEffect(() => {
     if (checkWinCondition(gameState.foundations)) {
       gameState.gameWon = true;
@@ -197,8 +235,6 @@ export function App() {
       <div className="aniBg" />
 
       <TopBar
-        setIsMenuOpen={setIsMenuOpen}
-        isMenuOpen={isMenuOpen}
         language={language}
         setLanguage={setLanguage}
         gameState={gameState}
@@ -206,133 +242,29 @@ export function App() {
         handleAutoMove={handleAutoMove}
         handleNewGame={handleNewGame}
         formatTime={formatTime}
+        setShowSettings={setShowSettings}
       />
 
       <div className="game-board">
         <div className="top-row">
           <div className="left-section">
-            <div className="stock-waste">
-              <div className="pile stock-pile" onClick={handleStockClick}>
-                {gameState.stock.length > 0 ? (
-                  <Card card={gameState.stock[gameState.stock.length - 1]!} />
-                ) : (
-                  <div className="empty-pile">
-                    <div className="reset-icon">↻</div>
-                  </div>
-                )}
-              </div>
-
-              <div className="pile waste-pile">
-                {gameState.waste.length > 0 ? (
-                  <Card
-                    card={gameState.waste[gameState.waste.length - 1]!}
-                    onPointerDown={(e) =>
-                      handlePointerDown(
-                        e,
-                        [gameState.waste[gameState.waste.length - 1]!],
-                        { type: "waste", index: 0 },
-                      )
-                    }
-                    style={{
-                      opacity: draggedCards.some(
-                        (c) =>
-                          c.id ===
-                          gameState.waste[gameState.waste.length - 1]?.id,
-                      )
-                        ? 0
-                        : 1,
-                    }}
-                  />
-                ) : (
-                  <div className="empty-pile">
-                    <img
-                      src="/assets/vanguard.svg"
-                      alt="suit"
-                      className="foundation-suit-icon"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+            <Waste
+              gameState={gameState}
+              draggedCards={draggedCards}
+              handlePointerDown={handlePointerDown}
+              handleStockClick={handleStockClick}
+            />
           </div>
 
-          <div className="foundations">
-            {gameState.foundations.map((foundation, index) => {
-              const suitIcons = [Kabale, Fallen, Vex, Taken];
-
-              return (
-                <div
-                  className="pile foundation-pile"
-                  key={index}
-                  data-foundation-index={index}
-                  onDragOver={(e) => e.preventDefault()}
-                >
-                  {foundation.length > 0 ? (
-                    <Card card={foundation[foundation.length - 1]!} />
-                  ) : (
-                    <div className="empty-pile foundation-empty">
-                      <img
-                        src={suitIcons[index]}
-                        alt="suit"
-                        className="foundation-suit-icon"
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <Foundations gameState={gameState} />
         </div>
 
-        <div className="tableau">
-          {gameState.tableau.map((pile, pileIndex) => (
-            <div
-              key={pileIndex}
-              className="tableau-pile"
-              data-tableau-index={pileIndex}
-              onDragOver={(e) => e.preventDefault()}
-            >
-              {pile.length === 0 ? (
-                <div className="empty-pile tableau-empty"></div>
-              ) : (
-                pile.map((card, cardIndex) => {
-                  const canDrag = card.faceUp;
-                  const cards = canDrag
-                    ? getCardStackFromTableau(
-                        gameState.tableau,
-                        pileIndex,
-                        cardIndex,
-                      )
-                    : [];
-
-                  const isBeingDragged = draggedCards.some(
-                    (c) => c.id === card.id,
-                  );
-
-                  return (
-                    <Card
-                      key={card.id}
-                      card={card}
-                      onPointerDown={(e) =>
-                        canDrag &&
-                        handlePointerDown(e, cards, {
-                          type: "tableau",
-                          index: pileIndex,
-                        })
-                      }
-                      style={{
-                        top: `${cardIndex * 30}px`,
-                        opacity: isBeingDragged ? 0 : 1,
-                        cursor: canDrag ? "grab" : "default",
-                      }}
-                      zIndex={cardIndex}
-                    />
-                  );
-                })
-              )}
-            </div>
-          ))}
-        </div>
+        <Tableau
+          gameState={gameState}
+          draggedCards={draggedCards}
+          handlePointerDown={handlePointerDown}
+          getCardStackFromTableau={getCardStackFromTableau}
+        />
       </div>
 
       {pointerPosition && draggedCards.length > 0 && (
@@ -341,6 +273,9 @@ export function App() {
           style={{
             left: pointerPosition.x - pointerOffset.x,
             top: pointerPosition.y - pointerOffset.y,
+            transform: `rotate(${dragRotation}deg)`,
+            transformOrigin: `${pointerOffset.x}px ${pointerOffset.y}px`,
+            transition: isReturnAnimation ? undefined : "transform 0.1s linear",
           }}
         >
           {draggedCards.map((card, index) => (
@@ -379,6 +314,8 @@ export function App() {
           }
         />
       ))}
+
+      <Settings show={showSettings} setShow={setShowSettings} />
     </div>
   );
 }

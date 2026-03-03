@@ -70,7 +70,7 @@ body {
 .aniBg {
   position: fixed;
   inset: -30%;
-  background: url("./assets/bg.png");
+  background: url("./assets/bg.webp");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -275,6 +275,7 @@ body {
   .top-row {
     flex-direction: column;
     align-items: center;
+    gap: 5px;
   }
 
   .tableau {

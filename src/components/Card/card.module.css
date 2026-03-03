@@ -39,6 +39,9 @@
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
+}
+
+.card.face-up:hover {
   z-index: 100 !important;
 }
 

@@ -9,7 +9,7 @@ export default function Modal({
   return (
     <div className={styles["modal-overlay"]} onClick={handleNewGame}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <h2>🎉 {localizedText.youWon} 🎉</h2>
+        <h2>{localizedText.youWon}</h2>
         <div className={styles["modal-stats"]}>
           <p>
             {localizedText.time}: <strong>{formatTime(time)}</strong>

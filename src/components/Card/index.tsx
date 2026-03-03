@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { isLight } from "@/gameLogic";
 import type { CardProps } from "@/types";
 import styles from "./card.module.css";
+import { themeStore } from "@/stores/themeStore";
+import { backgroundTheme, shirtTheme, suitTheme } from "@/data/themes";
 
 export function getSuitClass(suit: string): string {
   if (suit.includes("Void")) return "suit-void";
@@ -12,6 +14,8 @@ export function getSuitClass(suit: string): string {
 }
 
 function getCardBackgroundImage(rank: string, suit: string): string | null {
+  const { st } = themeStore();
+  const currentSuit = suitTheme.find((t) => t.id === st);
   try {
     const suitName = suit.includes("Solar")
       ? "Solar"
@@ -24,7 +28,7 @@ function getCardBackgroundImage(rank: string, suit: string): string | null {
             : null;
 
     if (suitName) {
-      return `/assets/card/${rank}-${suitName}.webp`;
+      return `/assets/card/${currentSuit?.id != 1 ? currentSuit?.path + "/" : ""}${rank}-${suitName}.webp`;
     }
 
     return null;
@@ -45,6 +49,19 @@ export function Card({
 
   const [imageError, setImageError] = useState(false);
 
+  const { theme, shirt } = themeStore();
+  const currentTheme = backgroundTheme.find((t) => t.id === theme);
+  const currentshirt = shirtTheme.find((s) => s.id === shirt);
+  const suitName = card.suit.includes("Solar")
+    ? "Solar"
+    : card.suit.includes("Void")
+      ? "Void"
+      : card.suit.includes("Stasis")
+        ? "Stasis"
+        : card.suit.includes("Strand")
+          ? "Strand"
+          : null;
+
   useEffect(() => {
     setImageError(false);
   }, [card.id, backgroundImage]);
@@ -64,7 +81,15 @@ export function Card({
     >
       {card.faceUp ? (
         <div
+          key={`${card.id}-${theme}`}
           className={`${styles["card-content"]} ${isLightCard ? styles.light : styles.dark} ${styles[suitClass]}`}
+          style={{
+            backgroundImage:
+              theme != 1
+                ? `url(/assets/card/${currentTheme?.path}/${suitName}.webp)`
+                : "",
+            backgroundSize: "cover",
+          }}
         >
           {!showBackgroundImage && (
             <div className={`${styles["card-corner"]} ${styles["top-left"]}`}>
@@ -110,7 +135,13 @@ export function Card({
           )}
         </div>
       ) : (
-        <div className={styles["card-back"]} />
+        <div
+          className={styles["card-back"]}
+          style={{
+            backgroundImage:
+              shirt != 1 ? `url(/assets/card/${currentshirt?.path}.webp)` : "",
+          }}
+        />
       )}
     </div>
   );

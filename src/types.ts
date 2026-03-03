@@ -48,15 +48,21 @@ export interface DragOrigin {
 }
 
 export interface TopBar {
-  setIsMenuOpen: any;
-  isMenuOpen: boolean;
-  language: Language;
+  language: string | number;
   setLanguage: any;
   gameState: GameState;
   logo: any;
   handleAutoMove: () => void;
   handleNewGame: () => void;
   formatTime: (seconds: number) => string;
+  setShowSettings: (showSetings: boolean) => void;
+}
+
+export interface SelectorProps {
+  selTheme?: boolean;
+  selShirt?: boolean;
+  selSuit?: boolean;
+  selLang?: boolean;
 }
 
 export interface Particles {
@@ -69,7 +75,11 @@ export interface Particles {
   rot: number;
 }
 
-export type Language = "de" | "en" | "uk" | "ru";
+export interface List {
+  id: number | string;
+  name: string;
+  path?: string;
+}
 
 export interface Translations {
   newGame: string;
@@ -79,4 +89,6 @@ export interface Translations {
   youWon: string;
   congratulations: string;
   playAgain: string;
+  settings: string;
+  preview: string;
 }
