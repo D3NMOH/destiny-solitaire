@@ -10,20 +10,21 @@ const server = serve({
       const assetPath = url.pathname.slice("/assets/".length);
       const filePath = join(import.meta.dir, "assets", assetPath);
 
-      if (process.env.NODE_ENV !== "production") {
-        console.log(
-          `[Asset Request] URL: ${url.pathname}, FilePath: ${filePath}`,
-        );
-      }
+      // if (process.env.NODE_ENV !== "production") {
+      //   console.log(
+      //     `[Asset Request] URL: ${url.pathname}, FilePath: ${filePath}`,
+      //   );
+      // }
 
       const file = Bun.file(filePath);
       if (await file.exists()) {
         return new Response(file);
-      } else {
-        if (process.env.NODE_ENV !== "production") {
-          console.warn(`[Asset Warning] File not found: ${filePath}`);
-        }
       }
+      // else {
+      //   if (process.env.NODE_ENV !== "production") {
+      //     console.warn(`[Asset Warning] File not found: ${filePath}`);
+      //   }
+      // }
       return new Response("Not Found", { status: 404 });
     },
 
@@ -61,4 +62,4 @@ const server = serve({
   },
 });
 
-console.log(`🚀 Server running at ${server.url}`);
+// console.log(`🚀 Server running at ${server.url}`);

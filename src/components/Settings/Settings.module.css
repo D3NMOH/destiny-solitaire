@@ -21,31 +21,42 @@
 }
 .close-btn {
   position: absolute;
-  right: 0.5rem;
+  right: 1rem;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  height: 30px;
-  width: 30px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
+  &:hover {
+    .close-btn--1 {
+      transform: rotate(-135deg);
+    }
+    .close-btn--2 {
+      transform: rotate(135deg);
+    }
+  }
 }
 .close-btn--1 {
   position: relative;
-  right: 0;
-  top: 0;
+  inset: 0;
   background-color: #fff;
   width: 5px;
   height: 30px;
   transform: rotate(45deg);
+  pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 .close-btn--2 {
   position: relative;
-  right: 0;
+  inset: 0;
   top: -30px;
   background-color: #fff;
   width: 5px;
   height: 30px;
   transform: rotate(-45deg);
+  pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 .settings-container {
   display: flex;
@@ -64,11 +75,13 @@
 }
 .settings-tab {
   width: 6rem;
+  height: 6rem;
   color: #fff;
   aspect-ratio: 1/1;
   padding: 15px;
   border: 1px solid #fff;
   font-size: 35px;
+  transition: all 0.2s ease-in-out;
 }
 
 .card-preview-container {
@@ -113,6 +126,9 @@
 }
 
 .select-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 10px 15px;
   font-size: 20px;
   font-weight: 700;

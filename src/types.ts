@@ -79,6 +79,7 @@ export interface List {
   id: number | string;
   name: string;
   path?: string;
+  icon?: string;
 }
 
 export interface Translations {

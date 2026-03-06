@@ -57,7 +57,31 @@ export default function Selector({
             selector.set(item.id);
           }}
         >
-          {item.name}
+          <div style={{ width: "30px", height: "30px" }}>
+            <img
+              src={item.icon}
+              alt={item.name}
+              style={{ display: item.icon ? "inline-block" : "none" }}
+            />
+            {typeof item.id === "string" && (
+              <p
+                style={{
+                  backgroundColor: "#fff3",
+                  display: "inline-flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "7px",
+                  fontSize: "15px",
+                }}
+              >
+                {item.id.toUpperCase()}
+              </p>
+            )}
+          </div>
+          <span>{item.name}</span>
         </div>
       ))}
     </div>

@@ -1,6 +1,7 @@
 {
   "name": "destiny-solitaire",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "description": "Destiny Solitaire",
   "private": true,
   "type": "module",
   "scripts": {

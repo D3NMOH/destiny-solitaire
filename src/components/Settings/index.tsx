@@ -82,8 +82,8 @@ export default function Settings({
           <Activity mode={tab !== 4 ? "visible" : "hidden"}>
             <Selector
               selLang={tab === 0}
-              selTheme={tab === 1}
-              selSuit={tab === 2}
+              selSuit={tab === 1}
+              selTheme={tab === 2}
               selShirt={tab === 3}
             />
           </Activity>
