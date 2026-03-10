@@ -19,50 +19,81 @@
   flex-direction: column;
   height: 100%;
 }
+
 .close-btn {
   position: absolute;
-  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 0.5rem;
+  top: 0.5rem;
   background-color: transparent;
   border: none;
   cursor: pointer;
   height: 60px;
   width: 60px;
   border-radius: 50%;
+  rotate: 90deg;
   &:hover {
     .close-btn--1 {
-      transform: rotate(-135deg);
+      transform: translateX(50%) rotate(-315deg);
     }
     .close-btn--2 {
-      transform: rotate(135deg);
+      transform: translateX(-50%) rotate(315deg);
+    }
+    &::before {
+      transform: rotate(0deg) scale(0.8);
+    }
+    &::after {
+      transform: rotate(0deg) scale(0.8);
     }
   }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #fff;
+    transform: rotate(360deg) scale(0);
+    transition: all 0.8s ease-out;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #fff;
+    transform: rotate(-360deg) scale(0);
+    transition: all 0.8s ease-out;
+  }
 }
+
 .close-btn--1 {
-  position: relative;
-  inset: 0;
   background-color: #fff;
   width: 5px;
   height: 30px;
-  transform: rotate(45deg);
+  transform: translateX(50%);
   pointer-events: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.8s ease-out;
 }
 .close-btn--2 {
-  position: relative;
-  inset: 0;
-  top: -30px;
   background-color: #fff;
   width: 5px;
   height: 30px;
-  transform: rotate(-45deg);
+  transform: translateX(-50%);
   pointer-events: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.8s ease-out;
 }
 .settings-container {
   display: flex;
   width: 100%;
-  gap: 1rem;
   height: 100%;
+  max-height: calc(100svh - 6rem - 10px);
+  gap: 1rem;
 }
 
 .settings-tabs {
@@ -103,28 +134,15 @@
 
 .select-list {
   display: flex;
-  flex: 1;
+  justify-content: flex-start;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
   scrollbar-width: none;
   z-index: 99999;
   pointer-events: all;
-  transition: all 0.3s ease;
   padding: 10px;
-  overflow-y: scroll;
-}
-
-.settings-content {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  border: 1px solid #fff;
-  flex-wrap: wrap;
   height: 100%;
+  overflow-y: auto;
 }
-
 .select-item {
   display: flex;
   align-items: center;
@@ -136,9 +154,39 @@
   border: 1px solid transparent;
   transition: all 0.2s ease;
   &:hover {
-    background: #fff4;
+    background: #fff;
     border-color: #888;
   }
+  &:first-child {
+    margin-top: auto;
+  }
+  &:last-child {
+    margin-bottom: auto;
+  }
+}
+
+.select-item--lang-icon {
+  background-color: #fff3;
+  border: 1px solid #fff7;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  font-size: 15px;
+}
+
+.settings-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid #fff;
+  height: 100%;
 }
 
 .about {
@@ -155,12 +203,15 @@
   height: auto;
   flex: 0.5;
   object-fit: contain;
+  align-self: center;
+  place-self: center;
 }
 .about-content {
   font-size: 20px;
   width: 100%;
   height: 100%;
   max-width: 300px;
+  place-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,6 +229,7 @@
     flex: 1;
     text-align: start;
     background-color: #fff3;
+    border: 1px solid #fff7;
     padding: 5px 10px;
     border-radius: 7px;
   }
@@ -188,17 +240,21 @@
 }
 .about-footer {
   width: 100%;
+  max-height: min-content;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
   padding: 1rem;
   flex: 0.5;
+  a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
 }
 
 @media (max-width: 768px) {
-  .settings {
-    max-height: 100%;
-  }
   .settings-container {
     flex-direction: column;
     max-height: none;
@@ -222,11 +278,10 @@
   }
 
   .settings-content {
-    flex-direction: column;
-    max-height: 100%;
-    flex: 1;
-    display: flex;
-    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr min-content;
+    height: 100%;
+    max-height: calc(100% - 7.2rem);
   }
 
   .card-preview-container {

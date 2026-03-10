@@ -5,7 +5,8 @@
 
 :root {
   /* Colors */
-  --color-bg-primary: #0a0f12;
+  /* --color-bg-primary: #0a0f12; */
+  --color-bg-primary: url("./assets/bg.webp");
 
   --color-accent-primary: #3b82f6;
   --color-text-primary: #f1f5f9;
@@ -53,6 +54,12 @@
   overscroll-behavior: none;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  padding-inline: 5px;
+}
+
 img {
   pointer-events: none;
 }
@@ -60,7 +67,11 @@ img {
 body {
   max-width: 100dvw;
   font-family: "Inter", sans-serif;
-  background-color: var(--color-bg-primary);
+  background: var(--color-bg-primary);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--color-text-primary);
   min-height: 100vh;
   overflow: hidden;
@@ -73,12 +84,12 @@ body {
 .aniBg {
   position: fixed;
   inset: -30%;
-  background: url("./assets/bg.webp");
+  background: url("./assets/bg-1.webp");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  animation: bgrotate 60s linear infinite;
+  animation: bgrotate 170s linear infinite;
 }
 
 @keyframes bgrotate {
@@ -87,6 +98,26 @@ body {
   }
   to {
     rotate: 360deg;
+  }
+}
+
+.aniBg2 {
+  position: fixed;
+  inset: -30%;
+  background: url("./assets/bg-2.webp");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  animation: bgrotate2 190s linear infinite;
+}
+
+@keyframes bgrotate2 {
+  from {
+    rotate: 360deg;
+  }
+  to {
+    rotate: 0deg;
   }
 }
 

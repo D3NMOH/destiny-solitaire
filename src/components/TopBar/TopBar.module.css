@@ -95,24 +95,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
   font-size: 1.25rem;
+  width: 5rem;
+  height: 5rem;
   font-weight: 600;
   border: 1px transparent solid;
   cursor: pointer;
   transition: all var(--transition-base);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
   background-color: transparent;
   color: #fff;
   &:hover {
-    border: 1px solid #fff;
+    &::before,
+    &::after {
+      transform: rotate(0deg) scale(0.8);
+      border-radius: 0;
+      opacity: 1;
+    }
   }
   &:active {
     transform: scale(0.98);
+  }
+  &::before,
+  &::after {
+    content: "";
+    border-radius: 50%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #fff;
+    transition: all 0.6s ease-out;
+    transform: rotate(250deg) scale(0);
+  }
+  &::after {
+    transform: rotate(-250deg) scale(0);
   }
 }
 

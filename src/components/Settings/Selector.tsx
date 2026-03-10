@@ -51,7 +51,7 @@ export default function Selector({
           className={styles["select-item"]}
           style={{
             backgroundColor:
-              item.id === selector.type ? "#fff1" : "transparent",
+              item.id === selector.type ? "#fff3" : "transparent",
           }}
           onClick={() => {
             selector.set(item.id);
@@ -64,19 +64,7 @@ export default function Selector({
               style={{ display: item.icon ? "inline-block" : "none" }}
             />
             {typeof item.id === "string" && (
-              <p
-                style={{
-                  backgroundColor: "#fff3",
-                  display: "inline-flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "7px",
-                  fontSize: "15px",
-                }}
-              >
+              <p className={styles["select-item--lang-icon"]}>
                 {item.id.toUpperCase()}
               </p>
             )}

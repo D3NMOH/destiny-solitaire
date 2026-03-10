@@ -36,6 +36,10 @@ export function App() {
   const { particles, spawnParticles } = useParticles();
   const localizedText = translations[language];
 
+  useEffect(() => {
+    document.documentElement.lang = language as string;
+  }, [language]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -233,7 +237,7 @@ export function App() {
   return (
     <div className="app">
       <div className="aniBg" />
-
+      <div className="aniBg2" />
       <TopBar
         language={language}
         setLanguage={setLanguage}
